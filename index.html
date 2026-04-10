@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Villas M&M — Disponibilités & Réservations</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-pale: #FDF6E3;
+  --dark: #0F0B05;
+  --dark2: #1A1208;
+  --dark3: #251C0D;
+  --sand: #F9F3E8;
+  --sand2: #EFE4C8;
+  --teal: #0D7A6F;
+  --teal-light: #12A898;
+  --red: #C0392B;
+  --red-light: #E74C3C;
+  --green: #1A7A4A;
+  --green-light: #27AE60;
+  --blue: #1A4A7A;
+  --text: #1C1407;
+  --text-light: #5C4A1E;
+  --white: #FDFAF4;
+  --miral: #1A4A7A;
+  --miral-light: #2E6FB5;
+  --miral-pale: #EAF2FB;
+  --maria: #0D7A6F;
+  --maria-light: #12A898;
+  --maria-pale: #E6F7F5;
+  --booked: #C0392B;
+  --booked-pale: #FDEDEC;
+  --pending: #D4880A;
+  --pending-pale: #FEF5E6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 60%, var(--dark3) 100%);
+  padding: 32px 24px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--gold);
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 120%, rgba(201,168,76,0.12) 0%, transparent 60%);
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  color: var(--gold-light);
+  letter-spacing: 3px;
+  position: relative;
+}
+.logo span { color: #fff; font-style: italic; }
+.logo-sub {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  position: relative;
+}
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  position: relative;
+}
+.nav-tab {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: rgba(255,255,255,0.6);
+  padding: 8px 22px;
+  border-radius: 30px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.5px;
+}
+.nav-tab:hover { border-color: var(--gold); color: var(--gold-light); }
+.nav-tab.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--dark);
+  font-weight: 700;
+}
+.admin-badge {
+  background: var(--red);
+  color: white;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 4px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ===== LEGEND ===== */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 14px 20px;
+  background: white;
+  border-bottom: 1px solid var(--sand2);
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+.legend-dot {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 16px 60px;
+}
+
+/* ===== VIEWS ===== */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===== VILLA SELECTOR ===== */
+.villa-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.villa-btn {
+  flex: 1;
+  min-width: 160px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.villa-btn.miral { border-color: var(--miral-light); }
+.villa-btn.maria { border-color: var(--maria-light); }
+.villa-btn.active.miral { background: var(--miral); color: white; }
+.villa-btn.active.maria { background: var(--maria); color: white; }
+.villa-btn .vicon {
+  font-size: 1.6rem;
+}
+.villa-btn .vname {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.villa-btn .vdesc {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* ===== CALENDAR ===== */
+.calendar-wrap {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: var(--dark2);
+  color: white;
+}
+.cal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cal-nav button {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+  display: flex;align-items:center;justify-content:center;
+}
+.cal-nav button:hover { background: rgba(201,168,76,0.3); }
+.cal-month-label {
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 140px;
+  text-align: center;
+}
+.cal-grid {
+  padding: 16px;
+}
+.cal-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.cal-day-name {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 0;
+}
+.cal-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cal-cell {
+  min-height: 52px;
+  border-radius: 6px;
+  padding: 6px 4px 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cal-cell.empty { background: transparent; cursor: default; }
+.cal-cell.past { background: #f8f8f8; color: #ccc; cursor: not-allowed; }
+.cal-cell.available {
+  background: var(--gold-pale);
+  border-color: rgba(201,168,76,0.2);
+}
+.cal-cell.available:hover {
+  background: var(--gold-light);
+  border-color: var(--gold);
+  transform: scale(1.04);
+}
+.cal-cell.booked-miral {
+  background: var(--miral-pale);
+  border-color: var(--miral-light);
+  color: var(--miral);
+  cursor: default;
+}
+.cal-cell.booked-maria {
+  background: var(--maria-pale);
+  border-color: var(--maria-light);
+  color: var(--maria);
+  cursor: default;
+}
+.cal-cell.blocked {
+  background: var(--booked-pale);
+  border-color: rgba(192,57,43,0.3);
+  color: var(--booked);
+  cursor: default;
+}
+.cal-cell.pending-cell {
+  background: var(--pending-pale);
+  border-color: rgba(212,136,10,0.4);
+  color: var(--pending);
+  cursor: default;
+}
+.cal-cell.today {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+.cell-date {
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.cell-label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Half-day styles */
+.cal-cell.half-start {
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--gold-pale) 50%, transparent 50%);
+  border-color: rgba(201,168,76,0.4);
+}
+.cal-cell.half-start.booked-miral {
+  background: linear-gradient(135deg, var(--miral-pale) 0%, var(--miral-pale) 50%, transparent 50%);
+  border-color: var(--miral-light);
+}
+.cal-cell.half-start.booked-maria {
+  background: linear-gradient(135deg, var(--maria-pale) 0%, var(--maria-pale) 50%, transparent 50%);
+  border-color: var(--maria-light);
+}
+.cal-cell.half-end {
+  background: linear-gradient(135deg, transparent 0%, transparent 50%, var(--gold-pale) 50%, var(--gold-pale) 100%);
+  border-color: rgba(201,168,76,0.4);
+}
+.cal-cell.half-end.booked-miral {
+  background: linear-gradient(135deg, transparent 0%, transparent 50%, var(--miral-pale) 50%, var(--miral-pale) 100%);
+  border-color: var(--miral-light);
+}
+.cal-cell.half-end.booked-maria {
+  background: linear-gradient(135deg, transparent 0%, transparent 50%, var(--maria-pale) 50%, var(--maria-pale) 100%);
+  border-color: var(--maria-light);
+}
+
+/* ===== BOOKING FORM ===== */
+.booking-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.booking-card-header {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--dark2), var(--dark3));
+  color: white;
+}
+.booking-card-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.booking-card-header p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+  margin-top: 4px;
+}
+.booking-form {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media(max-width:600px){ .booking-form { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1/-1; }
+.form-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  border: 1.5px solid var(--sand2);
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--sand);
+  transition: border-color 0.2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--gold); background: white; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.submit-btn {
+  grid-column: 1/-1;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: var(--dark);
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.submit-btn:hover { opacity: 0.9; }
+.submit-btn:active { transform: scale(0.99); }
+
+/* ===== SUCCESS MESSAGE ===== */
+.success-msg {
+  display: none;
+  background: #E8F8EF;
+  border: 1.5px solid var(--green-light);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 0 24px 24px;
+  color: var(--green);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ===== GUESTS VIEW ===== */
+.guests-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.guests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--dark2), var(--dark3));
+  color: white;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.guests-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.export-btn {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.export-btn:hover { opacity: 0.9; }
+.guests-table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 20px;
+}
+.guests-table thead {
+  background: var(--sand2);
+}
+.guests-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--sand);
+}
+.guests-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--sand2);
+  font-size: 0.85rem;
+}
+.guests-table tbody tr:hover {
+  background: var(--gold-pale);
+}
+.guest-villa {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.guest-villa.miral { background: var(--miral-pale); color: var(--miral); }
+.guest-villa.maria { background: var(--maria-pale); color: var(--maria); }
+.guest-status {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.guest-status.confirmed { background: var(--green); color: white; }
+.guest-status.approved { background: var(--teal); color: white; }
+.guest-status.pending { background: var(--pending); color: white; }
+.guest-status.declined { background: var(--red); color: white; }
+.empty-guests {
+  text-align: center;
+  padding: 40px 20px;
+  color: #bbb;
+  font-size: 1rem;
+}
+.guest-del-btn {
+  background: none;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.guest-del-btn:hover { background: var(--red); color: white; }
+
+/* ===== ADMIN VIEW ===== */
+.admin-login {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.admin-login h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  color: var(--dark2);
+  margin-bottom: 8px;
+}
+.admin-login p { color: var(--text-light); font-size: 0.85rem; margin-bottom: 24px; }
+.admin-login input {
+  width: 100%;
+  border: 1.5px solid var(--sand2);
+  border-radius: 7px;
+  padding: 12px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  outline: none;
+  background: var(--sand);
+}
+.admin-login input:focus { border-color: var(--gold); background: white; }
+.admin-login button {
+  width: 100%;
+  background: var(--dark2);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 7px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+.admin-login button:hover { background: var(--gold); color: var(--dark); }
+.admin-login .hint { font-size: 0.72rem; color: #aaa; margin-top: 12px; }
+
+/* ===== ADMIN PANEL ===== */
+.admin-panel { display: none; }
+.admin-panel.visible { display: block; }
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  align-items: start;
+}
+@media(max-width:900px){ .admin-grid { grid-template-columns: 1fr; } }
+
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+.sidebar-card-header {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar-card-header.red { background: var(--red); color: white; }
+.sidebar-card-header.green { background: var(--green); color: white; }
+.sidebar-card-body { padding: 16px 18px; }
+
+/* Sidebar tabs */
+.sidebar-tabs { display: flex; border-bottom: 2px solid var(--sand2); }
+.stab {
+  flex: 1; background: none; border: none;
+  padding: 12px 6px; font-family: 'Jost', sans-serif;
+  font-size: 0.77rem; font-weight: 700; color: var(--text-light);
+  cursor: pointer; letter-spacing: 0.3px; transition: color 0.2s;
+  position: relative;
+}
+.stab::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 2px; background: var(--gold); transform: scaleX(0); transition: transform 0.2s;
+}
+.stab.active { color: var(--dark2); }
+.stab.active::after { transform: scaleX(1); }
+.stab .badge {
+  display: inline-block; background: var(--pending); color: white;
+  font-size: 0.58rem; padding: 1px 5px; border-radius: 10px;
+  margin-left: 3px; vertical-align: middle; font-weight: 700;
+}
+.sidebar-tab-panel { display: none; }
+.sidebar-tab-panel.active { display: block; }
+
+/* Block dates form */
+.block-form { display: flex; flex-direction: column; gap: 10px; }
+.block-form label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.block-form input,
+.block-form select {
+  width: 100%;
+  border: 1.5px solid var(--sand2);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  background: var(--sand);
+  outline: none;
+}
+.block-form input:focus,
+.block-form select:focus { border-color: var(--gold); background: white; }
+.block-btn {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  letter-spacing: 0.5px;
+}
+.block-btn:hover { opacity: 0.85; }
+.block-btn.red { background: var(--red); color: white; }
+.block-btn.green { background: var(--green); color: white; }
+.block-btn.gold { background: var(--gold); color: var(--dark); }
+
+/* Requests list */
+.requests-list { display: flex; flex-direction: column; gap: 10px; }
+.request-item {
+  background: var(--sand);
+  border-radius: 8px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--pending);
+  position: relative;
+}
+.request-item.approved { border-left-color: var(--green-light); background: #F0FAF4; }
+.request-item.declined { border-left-color: var(--red); background: #FDF2F1; opacity: 0.7; }
+.req-name { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+.req-villa {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.req-villa.miral { background: var(--miral-pale); color: var(--miral); }
+.req-villa.maria { background: var(--maria-pale); color: var(--maria); }
+.req-dates { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
+.req-guests { font-size: 0.75rem; color: var(--text-light); }
+.req-msg { font-size: 0.75rem; color: #666; margin-top: 6px; font-style: italic; }
+.req-actions { display: flex; gap: 6px; margin-top: 10px; }
+.req-btn {
+  flex: 1;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.req-btn:hover { opacity: 0.8; }
+.req-btn.approve { background: var(--green); color: white; }
+.req-btn.decline { background: var(--red); color: white; }
+.req-btn.assign { background: var(--miral); color: white; }
+.req-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  position: absolute;
+  top: 10px; right: 10px;
+}
+.req-status.approved { background: var(--green); color: white; }
+.req-status.declined { background: var(--red); color: white; }
+.req-status.pending { background: var(--pending); color: white; }
+
+/* Bookings list */
+.bookings-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+.booking-item {
+  background: var(--sand);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-left: 3px solid var(--gold);
+}
+.booking-item.miral { border-left-color: var(--miral); }
+.booking-item.maria { border-left-color: var(--maria); }
+.booking-item.blocked { border-left-color: var(--red); }
+.booking-item.pending { border-left-color: var(--pending); }
+.bi-info { flex: 1; }
+.bi-name { font-weight: 700; font-size: 0.82rem; }
+.bi-dates { font-size: 0.73rem; color: var(--text-light); margin-top: 2px; }
+.bi-status { font-size: 0.65rem; color: var(--pending); font-weight: 700; margin-top: 2px; }
+.bi-del {
+  background: none;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.bi-del:hover { background: var(--red); color: white; }
+.bi-edit {
+  background: none;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  margin-right: 6px;
+}
+.bi-edit:hover { background: var(--gold); color: var(--dark); }
+
+.empty-state {
+  text-align: center;
+  color: #bbb;
+  font-size: 0.82rem;
+  padding: 20px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: popIn 0.25s ease;
+}
+@keyframes popIn {
+  from { opacity:0; transform: scale(0.92) translateY(10px); }
+  to { opacity:1; transform: scale(1) translateY(0); }
+}
+.modal h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+.modal p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 16px; }
+.modal-body { display: flex; flex-direction: column; gap: 10px; }
+.modal-body label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 4px;
+}
+.modal-body input, .modal-body select {
+  width: 100%;
+  border: 1.5px solid var(--sand2);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  background: var(--sand);
+  outline: none;
+}
+.modal-body input:focus, .modal-body select:focus { border-color: var(--gold); background: white; }
+.modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+.modal-btn {
+  flex: 1;
+  border: none;
+  padding: 11px;
+  border-radius: 7px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.modal-btn:hover { opacity: 0.85; }
+.modal-btn.primary { background: var(--gold); color: var(--dark); }
+.modal-btn.cancel { background: var(--sand2); color: var(--text-light); }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark2);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .cal-cell { min-height: 40px; font-size: 0.75rem; }
+  .cell-label { display: none; }
+  .booking-form { padding: 16px; }
+  .sidebar-card-body { padding: 12px; }
+  .guests-table th, .guests-table td { padding: 8px 12px; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div class="logo">Villas <span>M&M</span></div>
+  <div class="logo-sub">Location Vacances · Djerba</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchView('customer')">🏡 Disponibilités & Réservation</button>
+    <button class="nav-tab" id="guests-tab" style="display:none;" onclick="switchView('guests')">👥 Clients</button>
+    <button class="nav-tab" onclick="switchView('admin')">⚙️ Admin <span class="admin-badge">GÉRANT</span></button>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#FDF6E3;border:1.5px solid #C9A84C;"></div> Disponible</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FDEDEC;border:1.5px solid #bbb;"></div> Indisponible</div>
+  <div class="legend-item" id="legend-pending" style="display:none;"><div class="legend-dot" style="background:#FEF5E6;border:1.5px solid #D4880A;"></div> En attente</div>
+</div>
+
+<div class="main">
+
+<!-- ===== CUSTOMER VIEW ===== -->
+<div id="view-customer" class="view active">
+  <!-- Villa Selector -->
+  <div class="villa-selector">
+    <button class="villa-btn customer-villa-btn miral active" onclick="selectVilla('miral', this)">
+      <span class="vicon">🏡</span>
+      <div>
+        <div class="vname">Villa Miral</div>
+        <div class="vdesc">3 chambres · 6 pers · Piscine privée</div>
+      </div>
+    </button>
+    <button class="villa-btn customer-villa-btn maria" onclick="selectVilla('maria', this)">
+      <span class="vicon">🌴</span>
+      <div>
+        <div class="vname">Villa Maria</div>
+        <div class="vdesc">2 chambres · 6 pers · Piscine privée</div>
+      </div>
+    </button>
+  </div>
+
+  <!-- Calendar -->
+  <div class="calendar-wrap">
+    <div class="cal-header">
+      <div class="cal-nav">
+        <button onclick="changeMonth(-1)">&#8249;</button>
+        <div class="cal-month-label" id="cal-month-label">—</div>
+        <button onclick="changeMonth(1)">&#8250;</button>
+      </div>
+      <div class="cal-title" id="cal-villa-label">Villa Miral</div>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-days-header">
+        <div class="cal-day-name">Lun</div>
+        <div class="cal-day-name">Mar</div>
+        <div class="cal-day-name">Mer</div>
+        <div class="cal-day-name">Jeu</div>
+        <div class="cal-day-name">Ven</div>
+        <div class="cal-day-name">Sam</div>
+        <div class="cal-day-name">Dim</div>
+      </div>
+      <div class="cal-cells" id="cal-cells"></div>
+    </div>
+  </div>
+
+  <!-- Booking Form -->
+  <div class="booking-card">
+    <div class="booking-card-header">
+      <h2>📋 Demande de réservation</h2>
+      <p>Remplissez ce formulaire et nous vous confirmons rapidement</p>
+    </div>
+    <div class="success-msg" id="success-msg">
+      ✅ Votre demande a bien été envoyée ! Nous vous répondrons dans les plus brefs délais.
+    </div>
+    <div class="booking-form" id="booking-form">
+      <div class="form-group">
+        <label>Prénom & Nom *</label>
+        <input type="text" id="f-name" placeholder="ex : Ahmed Ben Ali" />
+      </div>
+      <div class="form-group">
+        <label>Téléphone / WhatsApp *</label>
+        <input type="tel" id="f-phone" placeholder="ex : +216 xx xxx xxx" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="votre@email.com" />
+      </div>
+      <div class="form-group">
+        <label>Villa souhaitée *</label>
+        <select id="f-villa">
+          <option value="miral">Villa Miral (3 chambres)</option>
+          <option value="maria">Villa Maria (2 chambres)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date d'arrivée *</label>
+        <input type="date" id="f-checkin" />
+      </div>
+      <div class="form-group">
+        <label>Date de départ *</label>
+        <input type="date" id="f-checkout" />
+      </div>
+      <div class="form-group">
+        <label>Nombre de personnes</label>
+        <select id="f-guests">
+          <option>1 personne</option>
+          <option>2 personnes</option>
+          <option>3 personnes</option>
+          <option>4 personnes</option>
+          <option>5 personnes</option>
+          <option>6 personnes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message (optionnel)</label>
+        <textarea id="f-msg" placeholder="Questions, demandes spéciales..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitRequest()">🌴 Envoyer ma demande de réservation</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GUESTS VIEW ===== -->
+<div id="view-guests" class="view">
+  <div class="guests-container">
+    <div class="guests-header">
+      <h2>👥 Informations des Clients</h2>
+      <button class="export-btn" onclick="exportGuestsToExcel()">📊 Exporter CSV (Excel)</button>
+    </div>
+    <div id="guests-content">
+      <table class="guests-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Villa</th>
+            <th>Arrivée</th>
+            <th>Départ</th>
+            <th>Personnes</th>
+            <th>Montant</th>
+            <th>Statut</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="guests-tbody">
+          <tr><td colspan="10" class="empty-guests">Aucun client pour le moment</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN VIEW ===== -->
+<div id="view-admin" class="view">
+
+  <!-- LOGIN -->
+  <div id="admin-login" class="admin-login">
+    <div style="font-size:2.5rem;margin-bottom:12px;">🔐</div>
+    <h2>Accès Gérant</h2>
+    <p>Connectez-vous pour gérer les disponibilités et les réservations</p>
+    <input type="text" id="admin-user" placeholder="Identifiant" />
+    <input type="password" id="admin-pass" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')adminLogin()" />
+    <button onclick="adminLogin()">Se connecter</button>
+  </div>
+
+  <!-- PANEL -->
+  <div id="admin-panel" class="admin-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--dark2);">Tableau de bord Gérant</div>
+        <div style="font-size:0.8rem;color:var(--text-light);">Gérez les calendriers des deux villas</div>
+      </div>
+      <button onclick="adminLogout()" style="background:var(--red);color:white;border:none;padding:8px 16px;border-radius:6px;font-family:'Jost',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;">Déconnexion</button>
+    </div>
+
+    <!-- Admin Villa Selector -->
+    <div class="villa-selector" style="margin-bottom:16px;">
+      <button class="villa-btn admin-villa-btn miral active" onclick="selectAdminVilla('miral', this)">
+        <span class="vicon">🏡</span>
+        <div><div class="vname">Villa Miral</div><div class="vdesc">3 chambres · Piscine privée</div></div>
+      </button>
+      <button class="villa-btn admin-villa-btn maria" onclick="selectAdminVilla('maria', this)">
+        <span class="vicon">🌴</span>
+        <div><div class="vname">Villa Maria</div><div class="vdesc">2 chambres · Piscine privée</div></div>
+      </button>
+    </div>
+
+    <div class="admin-grid">
+      <!-- Admin Calendar -->
+      <div>
+        <div class="calendar-wrap">
+          <div class="cal-header">
+            <div class="cal-nav">
+              <button onclick="changeMonth(-1); renderAdminCalendar()">&#8249;</button>
+              <div class="cal-month-label" id="admin-cal-month-label">—</div>
+              <button onclick="changeMonth(1); renderAdminCalendar()">&#8250;</button>
+            </div>
+            <div class="cal-title" id="admin-cal-villa-label">Villa Miral</div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-days-header">
+              <div class="cal-day-name">Lun</div>
+              <div class="cal-day-name">Mar</div>
+              <div class="cal-day-name">Mer</div>
+              <div class="cal-day-name">Jeu</div>
+              <div class="cal-day-name">Ven</div>
+              <div class="cal-day-name">Sam</div>
+              <div class="cal-day-name">Dim</div>
+            </div>
+            <div class="cal-cells" id="admin-cal-cells"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Sidebar -->
+      <div class="admin-sidebar">
+
+        <!-- Block Dates -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-header red">🚫 Bloquer des dates</div>
+          <div class="sidebar-card-body">
+            <div class="block-form">
+              <div>
+                <label>Villa</label>
+                <select id="block-villa">
+                  <option value="miral">Villa Miral</option>
+                  <option value="maria">Villa Maria</option>
+                </select>
+              </div>
+              <div>
+                <label>Du</label>
+                <input type="date" id="block-from" />
+              </div>
+              <div>
+                <label>Au</label>
+                <input type="date" id="block-to" />
+              </div>
+              <div>
+                <label>Raison (optionnel)</label>
+                <input type="text" id="block-reason" placeholder="ex: Entretien" />
+              </div>
+              <button class="block-btn red" onclick="blockDates()">🚫 Bloquer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assign Booking -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-header green">✅ Assigner à un client</div>
+          <div class="sidebar-card-body">
+            <div class="block-form">
+              <div>
+                <label>Villa</label>
+                <select id="assign-villa">
+                  <option value="miral">Villa Miral</option>
+                  <option value="maria">Villa Maria</option>
+                </select>
+              </div>
+              <div>
+                <label>Nom du client</label>
+                <input type="text" id="assign-name" placeholder="Prénom Nom" />
+              </div>
+              <div>
+                <label>Téléphone</label>
+                <input type="tel" id="assign-phone" placeholder="ex: +216 xx xxx xxx" />
+              </div>
+              <div>
+                <label>Du</label>
+                <input type="date" id="assign-from" />
+              </div>
+              <div>
+                <label>Au</label>
+                <input type="date" id="assign-to" />
+              </div>
+              <div>
+                <label>Montant (TND)</label>
+                <input type="number" id="assign-amount" placeholder="ex: 1500" min="0" step="1" />
+              </div>
+              <button class="block-btn green" onclick="assignBooking()">✅ Confirmer la réservation</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabbed: Requests + Bookings -->
+        <div class="sidebar-card">
+          <div class="sidebar-tabs">
+            <button class="stab active" id="stab-requests" onclick="switchSideTab('requests')">📬 Demandes</button>
+            <button class="stab" id="stab-bookings" onclick="switchSideTab('bookings')">📅 Réservations</button>
+          </div>
+
+          <!-- Requests Tab -->
+          <div class="sidebar-tab-panel active" id="spanel-requests">
+            <div class="sidebar-card-body" style="padding-top:12px;">
+              <div class="requests-list" id="requests-list">
+                <div class="empty-state">Aucune demande pour le moment</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bookings Tab -->
+          <div class="sidebar-tab-panel" id="spanel-bookings">
+            <div class="sidebar-card-body" style="padding-top:12px;">
+              <div class="bookings-list" id="bookings-list">
+                <div class="empty-state">Aucune réservation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- MODAL (Admin: Manage clicked date) -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Gérer cette date</h3>
+    <p id="modal-subtitle">Choisissez une action pour cette date</p>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">Annuler</button>
+      <button class="modal-btn primary" id="modal-edit" style="display:none;" onclick="openEditFromModal()">✏️ Éditer</button>
+      <button class="modal-btn primary" id="modal-confirm" onclick="confirmModal()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== STATE ==========
+let currentVilla = 'miral';       // customer calendar
+let adminVilla = 'miral';          // admin calendar (independent)
+let currentYear = new Date().getFullYear();
+let currentMonth = new Date().getMonth();
+let isAdmin = false;
+let modalAction = null;
+let modalDate = null;
+
+// Data storage (in-memory, persists via localStorage)
+let bookings = JSON.parse(localStorage.getItem('mm_bookings') || '[]');
+// bookings: [{id, villa, from, to, name, type:'booking'|'block', status:'confirmed'|'pending', reason}]
+
+let requests = JSON.parse(localStorage.getItem('mm_requests') || '[]');
+// requests: [{id, name, phone, email, villa, from, to, guests, msg, status:'pending'|'approved'|'declined'}]
+
+function saveData() {
+  localStorage.setItem('mm_bookings', JSON.stringify(bookings));
+  localStorage.setItem('mm_requests', JSON.stringify(requests));
+}
+
+// ========== NAVIGATION ==========
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  event.target.classList.add('active');
+  if (v === 'admin') { renderAdminPanel(); }
+  if (v === 'guests') { renderGuestsView(); }
+}
+
+function selectVilla(v, btn) {
+  // Customer villa selector — only affects customer buttons & customer calendar
+  currentVilla = v;
+  document.querySelectorAll('.customer-villa-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cal-villa-label').textContent = v === 'miral' ? 'Villa Miral' : 'Villa Maria';
+  document.getElementById('f-villa').value = v;
+  renderCalendar();
+}
+
+function selectAdminVilla(v, btn) {
+  // Admin villa selector — uses adminVilla (independent from customer currentVilla)
+  adminVilla = v;
+  document.querySelectorAll('.admin-villa-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('admin-cal-villa-label').textContent = v === 'miral' ? 'Villa Miral' : 'Villa Maria';
+  document.getElementById('block-villa').value = v;
+  document.getElementById('assign-villa').value = v;
+  renderAdminCalendar();
+}
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+  if (isAdmin) renderAdminCalendar();
+}
+
+// ========== HELPERS ==========
+const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+function dateKey(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function parseDate(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+
+function formatDate(s) {
+  const d = parseDate(s);
+  return d.getDate() + ' ' + MONTHS_FR[d.getMonth()].substring(0,3) + ' ' + d.getFullYear();
+}
+
+// getDatesInRange: from inclusive, to EXCLUSIVE (checkout day is free)
+function getDatesInRange(from, to) {
+  const dates = [];
+  let d = new Date(parseDate(from));
+  const end = parseDate(to);
+  while (d < end) {
+    dates.push(dateKey(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return dates;
+}
+
+// getInnerDates: strictly between check-in and check-out (excludes BOTH endpoints)
+// Used for conflict checking — first & last day are shareable
+function getInnerDates(from, to) {
+  const dates = [];
+  let d = new Date(parseDate(from));
+  d.setDate(d.getDate() + 1); // skip first day
+  const end = parseDate(to);  // stop before last day
+  while (d < end) {
+    dates.push(dateKey(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return dates;
+}
+
+// ── CUSTOMER date status ──────────────────────────────────────────────────────
+// First & last day of any booking = available (customers can book those days).
+// Only inner days (strictly between check-in and check-out) are unavailable.
+// No booking names or details shown — just available / unavailable.
+function getCustomerDateStatus(dateStr, villa) {
+  // Count how many bookings/requests claim this date as their start OR end
+  // If a day is both the end of one booking AND the start of another → fully blocked
+  let isEnd = false, isStart = false;
+
+  for (const b of bookings) {
+    if (b.villa !== villa) continue;
+    const isPending = b.type === 'booking' && b.status === 'pending';
+    const inner = getInnerDates(b.from, b.to);
+    if (inner.includes(dateStr)) {
+      // Strictly interior day → always blocked
+      return isPending ? { type: 'pending' } : { type: b.type };
+    }
+    if (dateStr === b.to)   isEnd   = true;
+    if (dateStr === b.from) isStart = true;
+  }
+  for (const r of requests) {
+    if (r.villa !== villa || r.status !== 'pending') continue;
+    const inner = getInnerDates(r.from, r.to);
+    if (inner.includes(dateStr)) return { type: 'pending' };
+    if (dateStr === r.to)   isEnd   = true;
+    if (dateStr === r.from) isStart = true;
+  }
+
+  // Shared turnover day (end of one + start of another) → fully blocked for customers
+  if (isEnd && isStart) return { type: 'booking' };
+
+  return { type: 'available' };
+}
+
+// ── ADMIN date status ─────────────────────────────────────────────────────────
+// Full range (from → to inclusive) shown as booked with guest name.
+// Last day shown as half-booked only when another booking starts that same day.
+function getDateStatus(dateStr, villa) {
+  for (const b of bookings) {
+    if (b.villa !== villa) continue;
+    const isPendingBooking = b.type === 'booking' && b.status === 'pending';
+    // Full range from → to inclusive
+    const rangeInclusive = getDatesInRange(b.from, b.to); // excludes day after to
+    const isOnCheckoutDay = dateStr === b.to;
+
+    // Checkout day itself
+    if (isOnCheckoutDay) {
+      const hasCheckInSameDay = bookings.some(
+        other => other.id !== b.id && other.villa === villa && other.from === dateStr
+      );
+      if (isPendingBooking) return { type: 'pending', name: b.name, id: b.id, position: hasCheckInSameDay ? 'end-half' : 'end' };
+      return { type: b.type, status: b.status, name: b.name || b.reason || '', id: b.id, position: hasCheckInSameDay ? 'end-half' : 'end' };
+    }
+
+    if (!rangeInclusive.includes(dateStr)) continue;
+
+    if (isPendingBooking) return { type: 'pending', name: b.name, id: b.id, position: 'full' };
+
+    let position = 'full';
+    if (dateStr === b.from) {
+      const hasSameDayCheckout = bookings.some(
+        other => other.id !== b.id && other.villa === villa && other.to === dateStr
+      );
+      position = hasSameDayCheckout ? 'start-half' : 'start';
+    }
+    return { type: b.type, status: b.status, name: b.name || b.reason || '', id: b.id, position };
+  }
+
+  // Pending customer requests
+  for (const r of requests) {
+    if (r.villa !== villa || r.status !== 'pending') continue;
+    const inner = getInnerDates(r.from, r.to);
+    if (inner.includes(dateStr) || dateStr === r.from || dateStr === r.to) {
+      return { type: 'pending', name: r.name };
+    }
+  }
+  return { type: 'available' };
+}
+
+function uid() { return Math.random().toString(36).substr(2,9); }
+
+// ========== CUSTOMER CALENDAR ==========
+// Customers see: available (gold) or unavailable (grey) only.
+// First & last day of any booking are shown as AVAILABLE — no booking details exposed.
+function renderCalendar() {
+  const label = MONTHS_FR[currentMonth] + ' ' + currentYear;
+  document.getElementById('cal-month-label').textContent = label;
+
+  const cells = document.getElementById('cal-cells');
+  cells.innerHTML = '';
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const today = dateKey(new Date());
+
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  for (let i = 0; i < startOffset; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-cell empty';
+    cells.appendChild(empty);
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const d = new Date(currentYear, currentMonth, day);
+    const dStr = dateKey(d);
+    const status = getCustomerDateStatus(dStr, currentVilla); // ← customer view
+    const isPast = dStr < today;
+    const isToday = dStr === today;
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+
+    if (isPast) {
+      cell.classList.add('past');
+    } else if (status.type === 'available') {
+      // Available — including first & last day of bookings
+      cell.classList.add('available');
+      cell.onclick = () => selectDateForBooking(dStr);
+    } else if (status.type === 'booking' || status.type === 'block') {
+      // Inner days of a booking — show as unavailable, no label, no name
+      cell.classList.add('blocked');
+      cell.style.cursor = 'not-allowed';
+    } else if (status.type === 'pending') {
+      cell.classList.add('pending-cell');
+      cell.style.cursor = 'not-allowed';
+    }
+
+    if (isToday) cell.classList.add('today');
+
+    // Only show the day number — no booking names or details
+    cell.innerHTML = `<span class="cell-date">${day}</span>`;
+
+    cells.appendChild(cell);
+  }
+}
+
+function selectDateForBooking(dStr) {
+  const fi = document.getElementById('f-checkin');
+  const fo = document.getElementById('f-checkout');
+  if (!fi.value || (fi.value && fo.value)) {
+    fi.value = dStr;
+    fo.value = '';
+  } else {
+    if (dStr > fi.value) {
+      fo.value = dStr;
+    } else {
+      fi.value = dStr;
+      fo.value = '';
+    }
+  }
+  showToast('📅 Dates sélectionnées — remplissez le formulaire ci-dessous');
+  document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ========== BOOKING FORM ==========
+function submitRequest() {
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const villa = document.getElementById('f-villa').value;
+  const checkin = document.getElementById('f-checkin').value;
+  const checkout = document.getElementById('f-checkout').value;
+  const guests = document.getElementById('f-guests').value;
+  const msg = document.getElementById('f-msg').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  if (!name || !phone || !checkin || !checkout) {
+    showToast('⚠️ Veuillez remplir tous les champs obligatoires', 'error'); return;
+  }
+  if (checkout <= checkin) {
+    showToast('⚠️ La date de départ doit être après la date d\'arrivée', 'error'); return;
+  }
+
+  // Inner days must be free; first & last day can overlap with another booking's endpoints
+  const innerDays = getInnerDates(checkin, checkout);
+  for (const d of innerDays) {
+    const s = getCustomerDateStatus(d, villa);
+    if (s.type !== 'available') {
+      showToast('❌ Certaines dates sélectionnées ne sont pas disponibles', 'error'); return;
+    }
+  }
+
+  const req = { id: uid(), name, phone, email, villa, from: checkin, to: checkout, guests, msg, status: 'pending' };
+  requests.push(req);
+  saveData();
+
+  document.getElementById('booking-form').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+  renderCalendar();
+  showToast('✅ Demande envoyée avec succès !', 'success');
+}
+
+// ========== GUESTS — single source of truth ================================
+// One row per request. The linked booking's status upgrades it:
+//   request.pending                       → "En attente"
+//   request.approved + booking.pending    → "Approuvé — en attente de confirmation"
+//   request.approved + booking.confirmed  → "Confirmé ✓"
+//   request.declined                      → "Refusé"
+// Admin-created bookings (no requestId)  → "Confirmé ✓" directly
+function buildGuestList() {
+  const rows = [];
+
+  // 1. Every request = one row; linked booking's status overrides display status
+  requests.forEach(r => {
+    const linked = bookings.find(b => b.requestId === r.id);
+    let statusLabel, statusClass;
+
+    if (r.status === 'declined') {
+      statusLabel = 'Refusé'; statusClass = 'declined';
+    } else if (r.status === 'pending') {
+      statusLabel = 'En attente'; statusClass = 'pending';
+    } else if (r.status === 'approved') {
+      if (linked && linked.status === 'confirmed') {
+        statusLabel = 'Confirmé ✓'; statusClass = 'confirmed';
+      } else {
+        statusLabel = 'Approuvé — en attente de confirmation'; statusClass = 'approved';
+      }
+    }
+
+    // Get amount from the linked confirmed booking if available
+    const linkedAmt = (linked && linked.amount) ? linked.amount : (r.amount || 0);
+    const phone = (linked && linked.phone) ? linked.phone : (r.phone || '');
+    rows.push({ name: r.name, phone, email: r.email,
+      villa: r.villa, from: r.from, to: r.to, guests: r.guests,
+      amount: linkedAmt, statusLabel, statusClass,
+      _reqId: r.id, _bookingId: linked ? linked.id : null });
+  });
+
+  // 2. Admin-created bookings only (no requestId = not linked to any customer request)
+  // Bookings WITH a requestId are already shown via loop 1 — skip them to avoid duplicates
+  bookings.forEach(b => {
+    if (b.type !== 'booking') return;       // ignore blocks
+    if (b.requestId) return;               // already covered by request row in loop 1
+    rows.push({ name: b.name, phone: b.phone || '', email: '',
+      villa: b.villa, from: b.from, to: b.to, guests: '',
+      amount: b.amount || 0,
+      statusLabel: b.status === 'confirmed' ? 'Confirmé ✓' : 'En attente de confirmation',
+      statusClass: b.status === 'confirmed' ? 'confirmed' : 'approved',
+      _reqId: null, _bookingId: b.id });
+  });
+
+  return rows;
+}
+
+// ========== GUESTS VIEW ==========
+function renderGuestsView() {
+  const tbody = document.getElementById('guests-tbody');
+  const rows = buildGuestList();
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty-guests">Aucun client pour le moment</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = '';
+  rows.forEach(g => {
+    const row = document.createElement('tr');
+    const villaClass = g.villa === 'miral' ? 'miral' : 'maria';
+    row.innerHTML = `
+      <td><strong>${g.name}</strong></td>
+      <td>${g.phone || '—'}</td>
+      <td>${g.email || '—'}</td>
+      <td><span class="guest-villa ${villaClass}">${g.villa === 'miral' ? 'Miral' : 'Maria'}</span></td>
+      <td>${formatDate(g.from)}</td>
+      <td>${formatDate(g.to)}</td>
+      <td>${g.guests || '—'}</td>
+      <td>${g.amount ? g.amount.toLocaleString('fr-TN') + ' TND' : '—'}</td>
+      <td><span class="guest-status ${g.statusClass}">${g.statusLabel}</span></td>
+      <td><button class="guest-del-btn" onclick="deleteGuest('${g._reqId}','${g._bookingId}')">🗑️</button></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+// ========== DELETE GUEST ==========
+function deleteGuest(reqId, bookingId) {
+  if (!confirm('Supprimer ce client et sa réservation ?')) return;
+
+  // Remove linked request
+  if (reqId && reqId !== 'null') {
+    requests = requests.filter(r => r.id !== reqId);
+  }
+
+  // Remove linked booking
+  if (bookingId && bookingId !== 'null') {
+    bookings = bookings.filter(b => b.id !== bookingId);
+  }
+
+  saveData();
+  renderGuestsView();
+  renderCalendar();
+  if (isAdmin) { renderAdminCalendar(); renderBookingsList(); renderRequests(); }
+  showToast('🗑️ Client supprimé', 'success');
+}
+
+// ========== EXCEL EXPORT ==========
+function exportGuestsToExcel() {
+  const rows = buildGuestList();
+  if (rows.length === 0) { showToast('⚠️ Aucun client à exporter', 'error'); return; }
+
+  // Build CSV with BOM so Excel opens it correctly with accents
+  const headers = ['Nom','Téléphone','Email','Villa','Arrivée','Départ','Personnes','Montant (TND)','Statut'];
+
+  const escape = v => {
+    const s = String(v === null || v === undefined ? '' : v);
+    // Wrap in quotes if contains comma, quote or newline
+    return s.includes(',') || s.includes('"') || s.includes('\n')
+      ? '"' + s.replace(/"/g, '""') + '"'
+      : s;
+  };
+
+  const csvRows = [
+    headers.map(escape).join(','),
+    ...rows.map(g => [
+      g.name,
+      g.phone || '',
+      g.email || '',
+      g.villa === 'miral' ? 'Villa Miral' : 'Villa Maria',
+      formatDate(g.from),
+      formatDate(g.to),
+      g.guests || '',
+      g.amount || '',
+      g.statusLabel
+    ].map(escape).join(','))
+  ];
+
+  const csv = '\uFEFF' + csvRows.join('\r\n');  // BOM for Excel UTF-8
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'Clients_VillasMM_' + dateKey(new Date()) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✅ Fichier CSV exporté — ouvrez-le dans Excel !', 'success');
+}
+
+// ========== ADMIN ==========
+function adminLogin() {
+  const u = document.getElementById('admin-user').value;
+  const p = document.getElementById('admin-pass').value;
+  if (u === 'admin' && p === 'villas2025') {
+    isAdmin = true;
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').classList.add('visible');
+    document.getElementById('guests-tab').style.display = 'inline-block';
+    renderAdminCalendar();
+    renderRequests();
+    renderBookingsList();
+    updateRequestBadge();
+    showToast('✅ Connexion réussie', 'success');
+  } else {
+    showToast('❌ Identifiant ou mot de passe incorrect', 'error');
+  }
+}
+
+function adminLogout() {
+  isAdmin = false;
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-panel').classList.remove('visible');
+  document.getElementById('guests-tab').style.display = 'none';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+}
+
+function renderAdminPanel() {
+  if (!isAdmin) return;
+  renderAdminCalendar();
+  renderRequests();
+  renderBookingsList();
+}
+
+// ========== ADMIN CALENDAR ==========
+function renderAdminCalendar() {
+  const label = MONTHS_FR[currentMonth] + ' ' + currentYear;
+  document.getElementById('admin-cal-month-label').textContent = label;
+
+  const cells = document.getElementById('admin-cal-cells');
+  cells.innerHTML = '';
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const today = dateKey(new Date());
+
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  for (let i = 0; i < startOffset; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-cell empty';
+    cells.appendChild(empty);
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const d = new Date(currentYear, currentMonth, day);
+    const dStr = dateKey(d);
+    // Admin uses full getDateStatus — sees complete booking range + names
+    const status = getDateStatus(dStr, adminVilla);
+    const isPast = dStr < today;
+    const isToday = dStr === today;
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+
+    if (isPast) {
+      cell.classList.add('past');
+    } else if (status.type === 'available') {
+      cell.classList.add('available');
+    } else if (status.type === 'booking') {
+      cell.classList.add('booked-' + adminVilla);
+      if (status.position === 'start-half') cell.classList.add('half-start');
+      else if (status.position === 'end-half') cell.classList.add('half-end');
+    } else if (status.type === 'block') {
+      cell.classList.add('blocked');
+      if (status.position === 'end-half') cell.classList.add('half-end');
+    } else if (status.type === 'pending') {
+      cell.classList.add('pending-cell');
+      if (status.position === 'end-half') cell.classList.add('half-end');
+    }
+
+    if (isToday) cell.classList.add('today');
+
+    cell.style.cursor = 'pointer';
+    cell.onclick = () => adminClickDate(dStr, status);
+
+    cell.innerHTML = `<span class="cell-date">${day}</span>`;
+    if (status.type !== 'available') {
+      const short = status.type === 'booking'
+        ? (status.name ? status.name.split(' ')[0] : '✓')
+        : status.type === 'block' ? '✕' : '?';
+      cell.innerHTML += `<span class="cell-label">${short}</span>`;
+    }
+
+    cells.appendChild(cell);
+  }
+}
+
+function adminClickDate(dStr, status) {
+  if (status.type === 'block' || status.type === 'booking') {
+    const bodyHTML = `<div style="background:var(--sand);border-radius:8px;padding:12px;font-size:0.85rem;">
+        <strong>Statut :</strong> ${status.type === 'block' ? '🚫 Bloquée' : '✅ Réservée'}<br>
+        <strong>${status.type === 'block' ? 'Raison' : 'Client'} :</strong> ${status.name || '—'}
+      </div>
+      <div style="margin-top:12px;font-size:0.82rem;color:var(--text-light);">Choisissez une action pour cette date</div>`;
+    openModal('Gérer cette date', formatDate(dStr), bodyHTML, () => removeBookingByDate(dStr, status.id), status.id);
+    document.getElementById('modal-edit').style.display = 'inline-block';
+    document.getElementById('modal-confirm').textContent = 'Supprimer';
+  } else if (status.type === 'available') {
+    document.getElementById('block-from').value = dStr;
+    document.getElementById('block-to').value = dStr;
+    showToast('📅 Date sélectionnée dans le formulaire Bloquer');
+  }
+}
+
+function openModal(title, subtitle, bodyHTML, onConfirm, bookingId) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-subtitle').textContent = subtitle;
+  document.getElementById('modal-body').innerHTML = bodyHTML;
+  document.getElementById('modal').classList.add('open');
+  modalAction = onConfirm;
+  window.currentModalBookingId = bookingId;
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  modalAction = null;
+}
+
+function confirmModal() {
+  if (modalAction) modalAction();
+  closeModal();
+}
+
+function removeBookingByDate(dStr, id) {
+  if (id) {
+    bookings = bookings.filter(b => b.id !== id);
+  } else {
+    bookings = bookings.filter(b => {
+      const range = getDatesInRange(b.from, b.to);
+      return !(b.villa === currentVilla && range.includes(dStr));
+    });
+  }
+  saveData();
+  renderAdminCalendar();
+  renderCalendar();
+  renderBookingsList();
+  showToast('🗑️ Entrée supprimée du calendrier', 'success');
+}
+
+// ========== BLOCK DATES ==========
+function blockDates() {
+  const villa = document.getElementById('block-villa').value;
+  const from = document.getElementById('block-from').value;
+  const to = document.getElementById('block-to').value;
+  const reason = document.getElementById('block-reason').value.trim();
+
+  if (!from || !to) { showToast('⚠️ Sélectionnez les dates à bloquer', 'error'); return; }
+  if (to < from) { showToast('⚠️ La date de fin doit être après la date de début', 'error'); return; }
+
+  bookings.push({ id: uid(), villa, from, to, type: 'block', reason: reason || 'Bloqué', name: reason || 'Bloqué', status: 'confirmed' });
+  saveData();
+
+  // Sync admin calendar to show the villa that was just blocked
+  adminVilla = villa;
+  document.querySelectorAll('.admin-villa-btn').forEach(b => {
+    b.classList.toggle('active', b.classList.contains(villa));
+  });
+  document.getElementById('admin-cal-villa-label').textContent = villa === 'miral' ? 'Villa Miral' : 'Villa Maria';
+
+  renderAdminCalendar();
+  renderCalendar();
+  renderBookingsList();
+
+  document.getElementById('block-from').value = '';
+  document.getElementById('block-to').value = '';
+  document.getElementById('block-reason').value = '';
+  showToast('🚫 Dates bloquées pour la ' + (villa === 'miral' ? 'Villa Miral' : 'Villa Maria'), 'success');
+}
+
+// ========== ASSIGN BOOKING ==========
+function assignBooking() {
+  const villa = document.getElementById('assign-villa').value;
+  const name = document.getElementById('assign-name').value.trim();
+  const phone = document.getElementById('assign-phone').value.trim();
+  const from = document.getElementById('assign-from').value;
+  const to = document.getElementById('assign-to').value;
+  const amount = parseFloat(document.getElementById('assign-amount').value) || 0;
+
+  if (!name || !from || !to) { showToast('⚠️ Remplissez tous les champs', 'error'); return; }
+  if (to < from) { showToast('⚠️ La date de fin doit être après la date de début', 'error'); return; }
+
+  // Inner days must be free; first & last day can overlap with another booking's endpoints
+  const innerDays = getInnerDates(from, to);
+  for (const d of innerDays) {
+    const s = getDateStatus(d, villa);
+    if (s.type !== 'available' && s.type !== 'pending') {
+      showToast('❌ Certaines dates sont déjà occupées par une réservation confirmée', 'error'); return;
+    }
+  }
+
+  // Try to find a pending booking for these dates (from approveRequest)
+  const existing = bookings.find(
+    b => b.villa === villa && b.status === 'pending' && b.type === 'booking' && b.from === from && b.to === to
+  );
+
+  if (existing) {
+    // Confirm the pending booking in-place — keep its requestId so buildGuestList
+    // links it back to the original request row (no duplicate in Clients tab)
+    existing.name = name;
+    existing.phone = phone;
+    existing.status = 'confirmed';
+    existing.amount = amount;
+    showToast('✅ Réservation confirmée pour ' + name, 'success');
+  } else {
+    // No prior pending booking — find if there is a matching approved request
+    // (admin typed dates manually instead of using prefillAssign)
+    const matchedRequest = requests.find(
+      r => r.villa === villa && r.from === from && r.to === to && r.status === 'approved'
+    );
+    const newBooking = { id: uid(), villa, from, to, type: 'booking', name, phone, status: 'confirmed', amount };
+    if (matchedRequest) {
+      // Link to the request so it shows as one row in Clients tab
+      newBooking.requestId = matchedRequest.id;
+    }
+    bookings.push(newBooking);
+    showToast('✅ Réservation assignée à ' + name, 'success');
+  }
+
+  saveData();
+  renderAdminCalendar();
+  renderCalendar();
+  renderBookingsList();
+  switchSideTab('bookings');
+
+  document.getElementById('assign-name').value = '';
+  document.getElementById('assign-phone').value = '';
+  document.getElementById('assign-from').value = '';
+  document.getElementById('assign-to').value = '';
+  document.getElementById('assign-amount').value = '';
+}
+
+// ========== SIDEBAR TABS ==========
+function switchSideTab(tab) {
+  ['requests','bookings'].forEach(t => {
+    document.getElementById('stab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('spanel-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+function updateRequestBadge() {
+  const pending = requests.filter(r => r.status === 'pending').length;
+  const tab = document.getElementById('stab-requests');
+  const existing = tab.querySelector('.badge');
+  if (existing) existing.remove();
+  if (pending > 0) {
+    const b = document.createElement('span');
+    b.className = 'badge';
+    b.textContent = pending;
+    tab.appendChild(b);
+  }
+}
+
+// ========== REQUESTS ==========
+function renderRequests() {
+  const list = document.getElementById('requests-list');
+  if (requests.length === 0) {
+    list.innerHTML = '<div class="empty-state">Aucune demande pour le moment</div>';
+    return;
+  }
+  list.innerHTML = '';
+  [...requests].reverse().forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'request-item' + (r.status !== 'pending' ? ' ' + r.status : '');
+    item.innerHTML = `
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+        <span class="req-name">${r.name}</span>
+        <span class="req-villa ${r.villa}">${r.villa === 'miral' ? 'Villa Miral' : 'Villa Maria'}</span>
+        ${r.status !== 'pending' ? `<span class="req-status ${r.status}">${r.status === 'approved' ? 'Approuvé' : 'Refusé'}</span>` : `<span class="req-status pending">En attente</span>`}
+      </div>
+      <div class="req-dates">📅 ${formatDate(r.from)} → ${formatDate(r.to)}</div>
+      <div class="req-guests">👥 ${r.guests} · 📞 ${r.phone}</div>
+      ${r.msg ? `<div class="req-msg">"${r.msg}"</div>` : ''}
+      ${r.status === 'pending' ? `
+      <div class="req-actions">
+        <button class="req-btn approve" onclick="approveRequest('${r.id}')">✅ Approuver</button>
+        <button class="req-btn decline" onclick="declineRequest('${r.id}')">❌ Refuser</button>
+      </div>` : r.status === 'approved' ? `
+      <div class="req-actions">
+        <button class="req-btn assign" onclick="prefillAssign('${r.id}')" style="background:var(--teal);color:white;">📋 Assigner & Confirmer</button>
+      </div>` : `
+      <div class="req-actions">
+      </div>`}
+    `;
+    list.appendChild(item);
+  });
+  updateRequestBadge();
+}
+
+function approveRequest(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+
+  // Inner days must be free; endpoints can overlap with another booking's first/last day
+  const innerDays = getInnerDates(r.from, r.to);
+  for (const d of innerDays) {
+    const s = getDateStatus(d, r.villa);
+    if (s.type !== 'available' && s.type !== 'pending') {
+      showToast('❌ Conflit de dates — impossible d\'approuver', 'error'); return;
+    }
+  }
+
+  // Mark request as approved (stays visible in requests list)
+  r.status = 'approved';
+
+  // Add a PENDING booking — shows orange on calendar until admin assigns/confirms it
+  bookings.push({
+    id: uid(),
+    villa: r.villa,
+    from: r.from,
+    to: r.to,
+    type: 'booking',
+    name: r.name,
+    status: 'pending',      // ← orange on calendar; turns confirmed only when assigned
+    requestId: r.id         // link back to source request
+  });
+
+  saveData();
+  renderRequests();
+  renderAdminCalendar();
+  renderCalendar();
+  renderBookingsList();
+  switchSideTab('requests');
+  showToast('✅ Demande approuvée ! Réservation en attente de confirmation sur le calendrier.', 'success');
+}
+
+function declineRequest(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+  r.status = 'declined';
+  saveData();
+  renderRequests();
+  renderCalendar();
+  showToast('❌ Demande refusée', 'error');
+}
+
+function prefillAssign(requestId) {
+  // Pre-fill the Assign form with this request's data so admin can confirm in one click
+  const r = requests.find(x => x.id === requestId);
+  if (!r) return;
+  document.getElementById('assign-villa').value = r.villa;
+  document.getElementById('assign-name').value = r.name;
+  document.getElementById('assign-phone').value = r.phone || '';
+  document.getElementById('assign-from').value = r.from;
+  document.getElementById('assign-to').value = r.to;
+  // Scroll to the assign card
+  document.getElementById('assign-villa').closest('.sidebar-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  showToast('📋 Formulaire pré-rempli — cliquez sur Confirmer pour valider', 'success');
+}
+
+// ========== BOOKINGS LIST ==========
+function renderBookingsList() {
+  const list = document.getElementById('bookings-list');
+  if (bookings.length === 0) {
+    list.innerHTML = '<div class="empty-state">Aucune réservation</div>';
+    return;
+  }
+  list.innerHTML = '';
+  [...bookings].sort((a,b) => a.from.localeCompare(b.from)).forEach(b => {
+    const item = document.createElement('div');
+    item.className = 'booking-item ' + (b.type === 'block' ? 'blocked' : b.villa) + (b.status === 'pending' ? ' pending' : '');
+    item.innerHTML = `
+      <div class="bi-info">
+        <div class="bi-name">
+          ${b.type === 'block' ? '🚫' : '✅'} ${b.name || b.reason}
+          <span style="font-size:0.65rem;background:${b.villa==='miral'?'var(--miral-pale)':'var(--maria-pale)'};color:${b.villa==='miral'?'var(--miral)':'var(--maria)'};padding:2px 7px;border-radius:10px;margin-left:6px;font-weight:700;">${b.villa==='miral'?'Miral':'Maria'}</span>
+        </div>
+        <div class="bi-dates">${formatDate(b.from)} → ${formatDate(b.to)}</div>
+        ${b.amount ? `<div class="bi-dates" style="color:var(--teal);font-weight:700;">💰 ${b.amount.toLocaleString('fr-TN')} TND</div>` : ''}
+        ${b.status === 'pending' ? `<div class="bi-status">⏳ En attente de confirmation</div>` : ''}
+      </div>
+      <button class="bi-edit" onclick="editBooking('${b.id}')">✏️ Éditer</button>
+      <button class="bi-del" onclick="deleteBooking('${b.id}')">✕</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function editBooking(id) {
+  const booking = bookings.find(b => b.id === id);
+  if (!booking) return;
+  
+  window.editingBookingId = id;
+  
+  const bodyHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Nom/Raison</label>
+        <input type="text" id="edit-name" value="${booking.name || booking.reason || ''}" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Date de début</label>
+        <input type="date" id="edit-from" value="${booking.from}" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;" />
+      </div>
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Date de fin</label>
+        <input type="date" id="edit-to" value="${booking.to}" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;" />
+      </div>
+      ${booking.type === 'block' ? `
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Raison du blocage</label>
+        <input type="text" id="edit-reason" value="${booking.reason || ''}" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;" />
+      </div>
+      ` : ''}
+      ${booking.status === 'pending' ? `
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Statut</label>
+        <select id="edit-status" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;">
+          <option value="pending">En attente</option>
+          <option value="confirmed">Confirmé</option>
+        </select>
+      </div>
+      ` : ''}
+      <div>
+        <label style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Montant (TND)</label>
+        <input type="number" id="edit-amount" value="${booking.amount || ''}" min="0" step="1" style="width:100%;border:1.5px solid var(--sand2);border-radius:6px;padding:9px 12px;font-family:'Jost',sans-serif;font-size:0.85rem;background:var(--sand);outline:none;" placeholder="ex: 1500" />
+      </div>
+    </div>
+  `;
+  
+  openModal('Éditer la réservation', booking.type === 'block' ? '🚫 Blocage' : '✅ Réservation', bodyHTML, () => saveEditedBooking(id, booking.type));
+}
+
+function saveEditedBooking(id, type) {
+  const booking = bookings.find(b => b.id === id);
+  if (!booking) return;
+  
+  const name = document.getElementById('edit-name').value.trim();
+  const from = document.getElementById('edit-from').value;
+  const to = document.getElementById('edit-to').value;
+  const reason = type === 'block' ? document.getElementById('edit-reason').value.trim() : '';
+  const status = document.getElementById('edit-status') ? document.getElementById('edit-status').value : booking.status;
+  
+  if (!name || !from || !to) {
+    showToast('⚠️ Remplissez tous les champs', 'error');
+    return;
+  }
+  
+  if (to < from) {
+    showToast('⚠️ La date de fin doit être après la date de début', 'error');
+    return;
+  }
+  
+  const innerDays = getInnerDates(from, to);
+  for (const d of innerDays) {
+    const s = getDateStatus(d, booking.villa);
+    if (s.type !== 'available' && s.type !== 'pending' && s.id !== id) {
+      showToast('❌ Certaines dates sont déjà occupées', 'error');
+      return;
+    }
+  }
+  
+  booking.name = name;
+  booking.from = from;
+  booking.to = to;
+  if (type === 'block') {
+    booking.reason = reason;
+  }
+  if (status) {
+    booking.status = status;
+  }
+  const editAmountEl = document.getElementById('edit-amount');
+  if (editAmountEl) booking.amount = parseFloat(editAmountEl.value) || 0;
+  
+  saveData();
+  renderBookingsList();
+  renderAdminCalendar();
+  renderCalendar();
+  showToast('✅ Réservation mise à jour', 'success');
+}
+
+function openEditFromModal() {
+  const bookingId = window.currentModalBookingId;
+  closeModal();
+  if (bookingId) {
+    editBooking(bookingId);
+  }
+}
+
+function deleteBooking(id) {
+  bookings = bookings.filter(b => b.id !== id);
+  saveData();
+  renderBookingsList();
+  renderAdminCalendar();
+  renderCalendar();
+  showToast('🗑️ Réservation supprimée', 'success');
+}
+
+// ========== TOAST ==========
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ========== INIT ==========
+const todayStr = dateKey(new Date());
+['f-checkin','f-checkout','block-from','block-to','assign-from','assign-to'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.min = todayStr;
+});
+
+if (bookings.length === 0) {
+  const y = new Date().getFullYear();
+  const m = String(new Date().getMonth() + 1).padStart(2,'0');
+  bookings.push({ id: uid(), villa: 'miral', from: `${y}-${m}-10`, to: `${y}-${m}-15`, type: 'booking', name: 'Famille Trabelsi', status: 'confirmed' });
+  bookings.push({ id: uid(), villa: 'maria', from: `${y}-${m}-08`, to: `${y}-${m}-12`, type: 'booking', name: 'M. et Mme Chaabane', status: 'confirmed' });
+  bookings.push({ id: uid(), villa: 'miral', from: `${y}-${m}-20`, to: `${y}-${m}-22`, type: 'block', name: 'Entretien', reason: 'Entretien', status: 'confirmed' });
+  saveData();
+}
+
+renderCalendar();
+</script>
+</body>
+</html>
